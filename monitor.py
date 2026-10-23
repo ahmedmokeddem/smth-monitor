@@ -56,13 +56,18 @@ def parse_residence(soup, url, catalog_name):
     if heading is None:
         raise ValueError("Titre h1 absent")
     name = heading.get_text(' ', strip=True) or catalog_name
-    # The page's essential fields should appear in the header, before detailed content.
-    texts = list(main.stripped_strings)
+    # h1 often contains nested spans: .stripped_strings splits it into multiple
+    # values. Extract the rendered main text instead of searching for an exact
+    # h1 string within individual fragments.
+    page_text = main.get_text(' ', strip=True)
     heading_text = heading.get_text(' ', strip=True)
-    index = next((i for i, t in enumerate(texts) if t == heading_text), None)
-    if index is None:
-        raise ValueError("En-tete de fiche introuvable")
-    header = ' '.join(texts[index:index + 42])[:2500]
+    start = page_text.find(heading_text)
+    if start < 0:
+        raise ValueError("En-tete de fiche introuvable dans le texte")
+    # Exclude sections describing other residences and testimonials.
+    after_heading = page_text[start:]
+    header = re.split(r"Votre\s+r[eé]sidence|Votre\s+logement|Autres\s+r[eé]sidences",
+                      after_heading, maxsplit=1, flags=re.I)[0][:5000]
     p = PROFILE.search(header)
     if not p:
         raise ValueError("Champ d'eligibilite absent")
@@ -91,9 +96,8 @@ def parse_residence(soup, url, catalog_name):
     else:
         raise ValueError("Disponibilite illisible")
     # Only the residence's own introductory section, never related residences.
-    head_until_detail = re.split(r'Votre r[eé]sidence|Votre logement|Autres r[eé]sidences', header, maxsplit=1, flags=re.I)[0]
-    limited = bool(LIMITED.search(head_until_detail) or LIMITED.search(" ".join(texts[max(0, index-4):index])))
-    reservation = RESERVED.search(head_until_detail)
+    limited = bool(LIMITED.search(header))
+    reservation = RESERVED.search(header)
     access = ('Accès limité' if limited else reservation.group(0).strip() if reservation else None)
     return {"name": name, "url": url, "available": available,
             "postcode": postcode.group(1), "access": access}
