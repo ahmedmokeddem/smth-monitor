@@ -1,21 +1,24 @@
-# ARPEJ monitor — GitHub Actions + Discord
+# ARPEJ IDF — Jeunes actifs
 
-## Installation
+Surveillance des résidences **explicitement identifiées** « jeunes actifs » en Île-de-France.
 
-1. Create a **public** GitHub repository, e.g. `arpej-monitor`. Public repos have free standard GitHub-hosted Actions runners. The repo and `state.json` will be public; the Discord secret will not.
-2. Upload `monitor.py`, `requirements.txt` and `.github/workflows/monitor.yml` on the default `main` branch.
-3. Discord: Channel Settings → Integrations → Webhooks → New Webhook → Copy Webhook URL.
-4. GitHub: Settings → Secrets and variables → Actions → New repository secret. Name: `DISCORD_WEBHOOK_URL`. Value: your Discord webhook URL.
-5. GitHub: Settings → Actions → General → Workflow permissions → **Read and write permissions**, if available.
-6. GitHub: Actions → ARPEJ monitoring → Run workflow. Check logs. First scan creates `state.json` without notifications.
-7. Subsequent scheduled runs compare `available` counts and alert on an increase.
+## Mise en place
 
-## Schedule
+Remplacer `monitor.py`, `requirements.txt`, `.github/workflows/monitor.yml` et ajouter `idf_residences.json` dans le dépôt GitHub. Conserver le secret `DISCORD_WEBHOOK_URL`.
 
-The YAML cron `7,22,37,52 * * * *` runs around every 15 minutes UTC. For every 5 minutes use `7-59/5 * * * *` (executes :07, :12, ..., :57). GitHub scheduling is best effort, not guaranteed exact.
+Le script initialise `state_idf_jeunes_actifs.json` au premier scan (aucune alerte), puis envoie des alertes pour les augmentations de disponibilité. L'ancien `state.json` est ignoré intentionnellement.
 
-## Important limitations
+## Limites à connaître
 
-**The parser is a first version, not live-tested against the site's raw HTML.** It detects nearby HTML text such as `complet` / `1 disponible` / `3 disponibles`. Check that the first Action log prints a plausible residence count. The source page returned through a web reading tool lists all 107 residences even with URL filters. Thus **do not assume the filtered city/audience is applied server-side** until checked using the browser and logs. If the filters are browser-side, adjust the scraping logic (e.g. use Playwright / inspect the network endpoint) before relying on notifications. Currently the script monitors all residences it can parse.
+- Le site publie toutes ses résidences dans le HTML même quand les filtres URL sont fournis. Le filtrage est donc appliqué dans le script.
+- Le référentiel `idf_residences.json` est une **photographie des 88 résidences franciliennes** identifiées dans le premier scan fourni. Toute nouvelle résidence non répertoriée sera signalée dans les logs et ignorée jusqu'à vérification et ajout dans le référentiel.
+- Les résidences mixtes ou accueillant des jeunes actifs sans la mention « jeunes actifs » dans leur nom ou URL sont ignorées volontairement pour éviter les fausses alertes. Pour les inclure, vérifier le public visé sur leur fiche et étendre `is_young_active`.
+- La disponibilité est mesurée **par résidence**, pas par appartement individuel.
+- La structure HTML peut changer : une exécution réussie ne garantit pas l'exactitude des extractions, à vérifier dans les logs.
+- Les exécutions GitHub Actions peuvent être retardées ou omises.
 
-A GitHub public repository may have schedules automatically disabled after 60 days without qualifying activity; check its Actions status. Some scheduled jobs may be delayed/dropped. Do not share the webhook in source. Avoid heavy or aggressive scraping and respect site terms. If the page starts returning an error, the workflow fails and preserves state.
+## Mention « réservé(e) » dans Discord
+
+Pour chaque **nouvelle disponibilité**, le script ouvre la fiche de la résidence et tente de détecter une mention du type « Résidence réservée aux ... » ou « Résidence exclusivement réservée à ... » près du titre. Il la joint à la notification Discord. Si aucune mention n'est détectée, il ne suppose pas pour autant que l'accès est libre. Si la fiche est inaccessible, il affiche « Conditions d'accès non vérifiées ».
+
+La mention **réservée** décrit une éventuelle restriction d'éligibilité (public/établissement), **pas** le fait qu'un logement soit déjà loué ou indisponible. Aucun appel supplémentaire à la fiche n'est effectué lorsqu'aucune disponibilité nouvelle n'est notifiée.
