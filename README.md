@@ -1,24 +1,32 @@
-# ARPEJ IDF — Jeunes actifs
+# ARPEJ Monitor — Île-de-France / jeunes actifs
 
-Surveillance des résidences **explicitement identifiées** « jeunes actifs » en Île-de-France.
+Surveille automatiquement **toutes les résidences listées par ARPEJ**, puis ouvre **chaque fiche à chaque scan** pour déterminer :
 
-## Mise en place
+- l'éligibilité depuis **« Logements clés en main pour : Jeunes actifs »** ;
+- la région depuis le **code postal francilien** (75, 77, 78, 91, 92, 93, 94, 95) ;
+- le nombre de logements depuis le champ **« Disponibilité »** ;
+- la mention **« Accès limité » / « Réservé à »** lorsqu'elle figure dans l'introduction de la fiche.
 
-Remplacer `monitor.py`, `requirements.txt`, `.github/workflows/monitor.yml` et ajouter `idf_residences.json` dans le dépôt GitHub. Conserver le secret `DISCORD_WEBHOOK_URL`.
+Le fichier `idf_residences.json` **n'est plus utilisé**. Aucune liste de résidences à maintenir.
 
-Le script initialise `state_idf_jeunes_actifs.json` au premier scan (aucune alerte), puis envoie des alertes pour les augmentations de disponibilité. L'ancien `state.json` est ignoré intentionnellement.
+## Installation GitHub
 
-## Limites à connaître
+1. Remplacer `monitor.py`, `requirements.txt` et `.github/workflows/monitor.yml` dans ton dépôt.
+2. Supprimer `idf_residences.json` (facultatif : il n'est plus utilisé).
+3. Conserver le secret GitHub Actions `DISCORD_WEBHOOK_URL`.
+4. Conserver `state_idf_jeunes_actifs.json` pour éviter de recevoir à nouveau les alertes existantes. Si ce fichier n'existe pas, le premier scan est une initialisation sans alertes.
+5. Ouvrir **Actions → ARPEJ monitoring → Run workflow**.
 
-- Le site publie toutes ses résidences dans le HTML même quand les filtres URL sont fournis. Le filtrage est donc appliqué dans le script.
-- Le référentiel `idf_residences.json` est une **photographie des 88 résidences franciliennes** identifiées dans le premier scan fourni. Toute nouvelle résidence non répertoriée sera signalée dans les logs et ignorée jusqu'à vérification et ajout dans le référentiel.
-- Les résidences mixtes ou accueillant des jeunes actifs sans la mention « jeunes actifs » dans leur nom ou URL sont ignorées volontairement pour éviter les fausses alertes. Pour les inclure, vérifier le public visé sur leur fiche et étendre `is_young_active`.
-- La disponibilité est mesurée **par résidence**, pas par appartement individuel.
-- La structure HTML peut changer : une exécution réussie ne garantit pas l'exactitude des extractions, à vérifier dans les logs.
-- Les exécutions GitHub Actions peuvent être retardées ou omises.
+Par défaut : toutes les **15 minutes**. Pour réduire le trafic, ne pas activer plusieurs workflows surveillant le site en parallèle. Environ 100 fiches HTTP sont consultées par scan, espacées d'environ 0,7 s.
 
-## Mention « réservé(e) » dans Discord
+**Avertissement :** parser de HTML fragile si ARPEJ modifie son site. Le code et des tests synthétiques ont été vérifiés, mais pas d'exécution réseau directe depuis l'environnement de construction. Examiner les logs du premier scan. Les fiches incomplètes ne sont pas converties en disponibilité zéro.
 
-Pour chaque **nouvelle disponibilité**, le script ouvre la fiche de la résidence et tente de détecter une mention du type « Résidence réservée aux ... » ou « Résidence exclusivement réservée à ... » près du titre. Il la joint à la notification Discord. Si aucune mention n'est détectée, il ne suppose pas pour autant que l'accès est libre. Si la fiche est inaccessible, il affiche « Conditions d'accès non vérifiées ».
+## Comportement
 
-La mention **réservée** décrit une éventuelle restriction d'éligibilité (public/établissement), **pas** le fait qu'un logement soit déjà loué ou indisponible. Aucun appel supplémentaire à la fiche n'est effectué lorsqu'aucune disponibilité nouvelle n'est notifiée.
+- Premier scan sans état : enregistrer sans notifier.
+- 0 → 1, 1 → 2 : notifier Discord.
+- Baisse ou stabilité : pas de notification.
+- Résidence nouvellement connue : si des logements sont disponibles, notifier après l'initialisation.
+- Les anciennes entrées restent dans l'historique même si une résidence disparaît.
+
+Pense à vérifier les conditions d'utilisation du site et à adapter la fréquence si nécessaire.
