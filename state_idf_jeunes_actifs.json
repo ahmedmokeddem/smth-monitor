@@ -1,0 +1,93 @@
+{
+  "/fr/residence/carmen-caron-residence-jeunes-actifs-aubervilliers": {
+    "name": "Résidence jeune actif Carmen Caron (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/carmen-caron-residence-jeunes-actifs-aubervilliers/",
+    "available": 0,
+    "postcode": "93300",
+    "access": null
+  },
+  "/fr/residence/jean-zay-residence-jeunes-actifs-cesson": {
+    "name": "Résidence jeune actif Jean Zay (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/jean-zay-residence-jeunes-actifs-cesson/",
+    "available": 6,
+    "postcode": "77240",
+    "access": null
+  },
+  "/fr/residence/louis-faure-dujarric-residence-jeunes-actifs-colombes": {
+    "name": "Résidence jeune actif Louis Faure-Dujarric",
+    "url": "https://www.arpej.fr/fr/residence/louis-faure-dujarric-residence-jeunes-actifs-colombes/",
+    "available": 0,
+    "postcode": "92700",
+    "access": null
+  },
+  "/fr/residence/saint-exupery-residence-jeunes-actifs-evry-courcouronnes": {
+    "name": "Résidence Saint-Exupéry",
+    "url": "https://www.arpej.fr/fr/residence/saint-exupery-residence-jeunes-actifs-evry-courcouronnes/",
+    "available": 0,
+    "postcode": "91000",
+    "access": null
+  },
+  "/fr/residence/la-cerisaie-residence-jeunes-actifs-fresnes": {
+    "name": "Résidence jeune actif La Cerisaie",
+    "url": "https://www.arpej.fr/fr/residence/la-cerisaie-residence-jeunes-actifs-fresnes/",
+    "available": 0,
+    "postcode": "94260",
+    "access": null
+  },
+  "/fr/residence/jazz-residence-jeunes-actifs-mantes-la-ville": {
+    "name": "Résidence jeune actif Jazz (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/jazz-residence-jeunes-actifs-mantes-la-ville/",
+    "available": 0,
+    "postcode": "78711",
+    "access": null
+  },
+  "/fr/residence/wangari-maathai-residence-jeunes-actifs-montreuil": {
+    "name": "Résidence jeune actif Wangari Maathai  (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/wangari-maathai-residence-jeunes-actifs-montreuil/",
+    "available": 0,
+    "postcode": "93100",
+    "access": null
+  },
+  "/fr/residence/michel-serres-le-luzard-residence-jeunes-actifs-noisiel": {
+    "name": "Résidence jeune actif Michel Serres – Le Luzard (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/michel-serres-le-luzard-residence-jeunes-actifs-noisiel/",
+    "available": 0,
+    "postcode": "77186",
+    "access": null
+  },
+  "/fr/residence/alexandre-manceau-residence-jeunes-actifs-palaiseau": {
+    "name": "Résidence jeune actif Alexandre Manceau (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/alexandre-manceau-residence-jeunes-actifs-palaiseau/",
+    "available": 0,
+    "postcode": "91120",
+    "access": null
+  },
+  "/fr/residence/campuseo-residence-jeunes-actifs-velizy-villacoublay": {
+    "name": "Résidence jeune actif Campuséo (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/campuseo-residence-jeunes-actifs-velizy-villacoublay/",
+    "available": 0,
+    "postcode": "78140",
+    "access": null
+  },
+  "/fr/residence/millenium-residence-jeunes-actifs-velizy-villacoublay": {
+    "name": "Résidence jeune actif Millénium  (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/millenium-residence-jeunes-actifs-velizy-villacoublay/",
+    "available": 0,
+    "postcode": "78140",
+    "access": null
+  },
+  "/fr/residence/philippe-auguste-residence-jeunes-actifs-vincennes": {
+    "name": "Résidence jeune actif Philippe Auguste",
+    "url": "https://www.arpej.fr/fr/residence/philippe-auguste-residence-jeunes-actifs-vincennes/",
+    "available": 0,
+    "postcode": "94300",
+    "access": null
+  },
+  "/fr/residence/residence-jeunes-actifs-la-cybele-voisins-le-bretonneux": {
+    "name": "Résidence jeune actif La Cybèle (partie Pour Jeunes Actifs)",
+    "url": "https://www.arpej.fr/fr/residence/residence-jeunes-actifs-la-cybele-voisins-le-bretonneux/",
+    "available": 0,
+    "postcode": "78960",
+    "access": null
+  }
+}
